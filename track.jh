@@ -1,0 +1,105 @@
+
+entity Account {
+	name String required
+	photo ImageBlob  
+    description String   
+    address1 String 
+    address2 String 
+    state  String 
+    country String 
+    postalCode String
+    longitude String
+    latitude String
+    image1 ImageBlob 
+    createdBy String
+    email String
+    phone String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+entity Contact {
+	name String required
+	photo ImageBlob  
+    phoneNumber Number 
+    address1 String 
+    address2 String 
+    state  String 
+    country String 
+    postalCode String
+    longitude String
+    latitude String
+    trackId String 
+    createdBy String
+    email String
+    phone String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+entity Fence {
+	name String required
+    longitude String 
+    latitude String 
+    fenceType String
+    polyline String
+    radious Number 
+    createdBy String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+entity Alert {
+	name String required
+    trackingPeriod Number required
+    isSMS Boolean 
+    isEmail Boolean 
+    createdBy String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+entity Tracking {
+	name String required
+    longitude String 
+    latitude String
+    isInside Boolean
+    isOutSide Boolean
+    createdBy String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+entity TrackingHistory {
+	name String required
+    longitude String 
+    latitude String 
+    createdBy String
+    CreatedDate DateTime
+    lastModifiedBy String
+    lastModifiedDate DateTime
+}
+
+relationship OneToOne {
+	Account{Alert(Name)} to Alert{Family(Name)},
+}
+relationship OneToMany {
+	Account{Child(Name)} to Contact{Family(Name)},
+    Contact{Fence(Name)} to Fence{Child(Name)},
+	Contact{Tracking(Name)} to Tracking{Child(Name)} 
+    Tracking{TrackingHistory(Name)} to TrackingHistory{Tracking(Name)} 
+}
+
+
+// Set pagination options
+paginate Account  with infinite-scroll
+paginate Contact,Fence,Tracking,TrackingHistory with pagination
+
+// Use Data Transfer Objects (DTO)
+ dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl 
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
